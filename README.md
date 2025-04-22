@@ -55,8 +55,8 @@ Una plataforma de streaming elegante y moderna con perfiles de usuario, planes d
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/EchavarriaLander/ProjectoLander.git
-   cd ProjectoLander
+   git clone https://github.com/etec-integration-project/2025-frontend-EchavarriaLander.git
+   cd 2025-frontend-EchavarriaLander
    ```
 
 2. Inicia la aplicación con Docker Compose:
@@ -139,6 +139,6 @@ Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE par
 
 ## 📧 Contacto
 
-Lander Echavarria - l.echavarria@alumno.etec.um.edu.ar
+Tu Nombre - tu.email@ejemplo.com
 
-Enlace del Proyecto: [https://github.com/EchavarriaLander/ProjectoLander](https://github.com/EchavarriaLander/ProjectoLander)
+Enlace del Proyecto: [https://github.com/etec-integration-project/2025-frontend-EchavarriaLander](https://github.com/etec-integration-project/2025-frontend-EchavarriaLander)
