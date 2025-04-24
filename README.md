@@ -139,6 +139,6 @@ Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE par
 
 ## 📧 Contacto
 
-Tu Nombre - tu.email@ejemplo.com
+Lander Echavarria - l.echavarria@alumno.etec.um.edu.ar
 
 Enlace del Proyecto: [https://github.com/etec-integration-project/2025-frontend-EchavarriaLander](https://github.com/etec-integration-project/2025-frontend-EchavarriaLander)
