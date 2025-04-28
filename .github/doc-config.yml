@@ -1,0 +1,46 @@
+# Configuración de la documentación automática
+documentation:
+  # Rutas de los archivos de salida
+  output:
+    milestones: docs/milestones.md
+    issues: docs/issues.md
+    pull_requests: docs/pull-requests.md
+    changelog: docs/CHANGELOG.md
+    release_notes: docs/RELEASE_NOTES.md
+
+  # Configuración de milestones
+  milestones:
+    include_closed: true
+    include_open: true
+    exclude_titles: []
+    include_progress: true
+
+  # Configuración de issues
+  issues:
+    include_closed: true
+    include_open: true
+    labels:
+      include: ["bug", "enhancement", "feature"]
+      exclude: ["wontfix", "duplicate"]
+    group_by_labels: true
+
+  # Configuración de pull requests
+  pull_requests:
+    include_merged: true
+    include_open: true
+    include_closed: true
+    link_issues: true
+    link_milestones: true
+
+  # Configuración del changelog
+  changelog:
+    max_entries: 50
+    group_by_type: true
+    include_links: true
+
+  # Configuración de notas de lanzamiento
+  release_notes:
+    include_merged_prs: true
+    include_closed_issues: true
+    include_milestones: true
+    format: markdown 
