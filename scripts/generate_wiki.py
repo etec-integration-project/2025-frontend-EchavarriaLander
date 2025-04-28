@@ -312,23 +312,10 @@ def safe_cleanup(directory):
 def check_repo_access(api_url, headers):
     """Verificar acceso al repositorio"""
     try:
-        # Intentar obtener datos del repositorio
         response = requests.get(api_url, headers=headers)
-        
-        # Si la respuesta es exitosa, retornar los datos
         if response.status_code == 200:
             return response.json()
-            
-        # Si hay error, mostrar el mensaje específico
-        if response.status_code == 401:
-            raise WikiGenerationError("Token inválido o expirado")
-        elif response.status_code == 403:
-            raise WikiGenerationError("Token sin permisos suficientes")
-        elif response.status_code == 404:
-            raise WikiGenerationError("Repositorio no encontrado")
-        else:
-            raise WikiGenerationError(f"Error de API: {response.status_code} - {response.text}")
-            
+        raise WikiGenerationError(f"Error de API: {response.status_code}")
     except requests.exceptions.RequestException as e:
         raise WikiGenerationError(f"Error de conexión: {str(e)}")
 
