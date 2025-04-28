@@ -49,11 +49,11 @@ def run_git_command(cmd, error_msg=None, check=True):
 
 def verify_token():
     """Verificar que el token existe y tiene el formato correcto"""
-    token = os.environ.get('GITHUB_TOKEN')
+    token = os.environ.get('WIKI_TOKEN')
     if not token:
-        raise WikiGenerationError("GITHUB_TOKEN no encontrado en variables de entorno")
+        raise WikiGenerationError("WIKI_TOKEN no encontrado en variables de entorno")
     if not token.strip():
-        raise WikiGenerationError("GITHUB_TOKEN está vacío")
+        raise WikiGenerationError("WIKI_TOKEN está vacío")
     return token
 
 def generate_wiki_pages():

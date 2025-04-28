@@ -47,6 +47,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install PyGithub markdown2 jinja2 requests
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "EchavarriaLander"
+          git config --global user.email "l.echavarria@alumno.um.edu.ar"
+          git config --global credential.helper store
+          echo "https://EchavarriaLander:${{ secrets.WIKI_TOKEN }}@github.com" > ~/.git-credentials
+
       - name: Fetch MercadoPago Service Issues and Milestones
         env:
           WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
@@ -61,8 +68,6 @@ jobs:
         env:
           WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
         run: |
-          git config --global user.name "EchavarriaLander"
-          git config --global user.email "l.echavarria@alumno.um.edu.ar"
           python scripts/generate_wiki.py
       
       - name: Setup Pages
