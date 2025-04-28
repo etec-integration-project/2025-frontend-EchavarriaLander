@@ -25,7 +25,7 @@ permissions:
   wiki: write       # Permiso específico para wiki
 
 env:
-  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+  WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
 
 jobs:
   build:
@@ -35,7 +35,7 @@ jobs:
       - name: Checkout MercadoPago Service
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.ACCESS_TOKEN }}
+          token: ${{ secrets.WIKI_TOKEN }}
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -49,7 +49,7 @@ jobs:
 
       - name: Fetch MercadoPago Service Issues and Milestones
         env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
         run: |
           python scripts/fetch_github_data.py
 
@@ -59,10 +59,10 @@ jobs:
 
       - name: Generate MercadoPago Wiki
         env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "EchavarriaLander"
+          git config --global user.email "l.echavarria@alumno.um.edu.ar"
           python scripts/generate_wiki.py
       
       - name: Setup Pages
