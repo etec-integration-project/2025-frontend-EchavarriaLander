@@ -10,6 +10,8 @@ on:
     types: [opened, closed, edited, deleted]
   milestone:
     types: [created, closed, edited, deleted]
+  pull_request:
+    types: [opened, closed, edited, merged]
 
 # Permisos actualizados
 permissions:
@@ -52,7 +54,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install PyGithub markdown2 jinja2 requests
+          pip install PyGithub markdown2 jinja2 requests pyyaml
 
       - name: Fetch MercadoPago Service Issues and Milestones
         env:
@@ -63,6 +65,10 @@ jobs:
       - name: Generate MercadoPago Documentation
         run: |
           python scripts/generate_docs.py
+
+      - name: Generate Release Notes
+        run: |
+          python scripts/generate_release_notes.py
 
       - name: Generate MercadoPago Wiki
         env:
