@@ -101,10 +101,6 @@ def generate_wiki_pages():
         wiki_url = f"https://x-access-token:{token}@github.com/{repo}.wiki.git"
         print("URL de wiki configurada (token oculto)")
         
-        # Configurar git
-        run_command(['git', 'config', '--global', 'user.name', 'github-actions[bot]'])
-        run_command(['git', 'config', '--global', 'user.email', 'github-actions[bot]@users.noreply.github.com'])
-        
         # Verificar acceso Git
         print("Verificando acceso Git...")
         run_git_command(['git', 'ls-remote', wiki_url], 
