@@ -321,9 +321,9 @@ def check_repo_access(api_url, headers):
         permissions = repo_data.get('permissions', {})
         
         # Solo verificar que el token tenga acceso al repositorio
-        if not permissions:
-            print("Permisos actuales:", permissions)  # Debug
-            raise WikiGenerationError("No se pudieron obtener los permisos del repositorio")
+        if not repo_data:
+            print("Datos del repositorio:", repo_data)  # Debug
+            raise WikiGenerationError("No se pudieron obtener los datos del repositorio")
             
         return repo_data
     except requests.exceptions.RequestException as e:
