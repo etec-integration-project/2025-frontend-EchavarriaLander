@@ -49,11 +49,9 @@ def run_git_command(cmd, error_msg=None, check=True):
 
 def verify_token():
     """Verificar que el token existe y tiene el formato correcto"""
-    token = os.environ.get('GITHUB_TOKEN')
+    token = os.environ.get('WIKI_TOKEN')
     if not token:
-        raise WikiGenerationError("GITHUB_TOKEN no encontrado en variables de entorno")
-    if not token.strip():
-        raise WikiGenerationError("GITHUB_TOKEN está vacío")
+        raise WikiGenerationError("WIKI_TOKEN no encontrado en variables de entorno")
     return token
 
 def generate_wiki_pages():
@@ -100,10 +98,6 @@ def generate_wiki_pages():
         # URL para git con autenticación (formato más seguro)
         wiki_url = f"https://x-access-token:{token}@github.com/{repo}.wiki.git"
         print("URL de wiki configurada (token oculto)")
-        
-        # Configurar git
-        run_command(['git', 'config', '--global', 'user.name', 'github-actions[bot]'])
-        run_command(['git', 'config', '--global', 'user.email', 'github-actions[bot]@users.noreply.github.com'])
         
         # Verificar acceso Git
         print("Verificando acceso Git...")
@@ -316,35 +310,14 @@ def safe_cleanup(directory):
             print(f"Error limpiando {directory}: {e}")
 
 def check_repo_access(api_url, headers):
-    """Verificar acceso al repositorio y sus características"""
+    """Verificar acceso al repositorio"""
     try:
         response = requests.get(api_url, headers=headers)
-        response.raise_for_status()  # Lanzar excepción para códigos de error HTTP
-        
-        repo_data = response.json()
-        
-        # Verificar permisos específicos para wiki
-        permissions = repo_data.get('permissions', {})
-        
-        # Verificar todos los permisos necesarios
-        if not permissions.get('push'):
-            print("Permisos actuales:", permissions)  # Debug
-            raise WikiGenerationError("El token no tiene permisos de escritura")
-        if not permissions.get('pull'):
-            raise WikiGenerationError("El token no tiene permisos de lectura")
-        if not repo_data.get('has_wiki') and not permissions.get('admin'):
-            raise WikiGenerationError("La wiki está deshabilitada y el token no tiene permisos para habilitarla")
-        
-        return repo_data
+        if response.status_code == 200:
+            return response.json()
+        raise WikiGenerationError(f"Error de API: {response.status_code}")
     except requests.exceptions.RequestException as e:
-        if response.status_code == 401:
-            raise WikiGenerationError("Token inválido o expirado")
-        elif response.status_code == 403:
-            raise WikiGenerationError("Token sin permisos suficientes")
-        elif response.status_code == 404:
-            raise WikiGenerationError("Repositorio no encontrado")
-        else:
-            raise WikiGenerationError(f"Error de API: {str(e)}")
+        raise WikiGenerationError(f"Error de conexión: {str(e)}")
 
 if __name__ == '__main__':
     generate_wiki_pages() 

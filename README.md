@@ -135,7 +135,7 @@ Este proyecto está licenciado bajo la Licencia MIT - ver el archivo LICENSE par
 
 ## 📸 Capturas de Pantalla
 
-
+NO HAY
 
 ## 📧 Contacto
 

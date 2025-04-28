@@ -11,28 +11,38 @@ on:
   milestone:
     types: [created, closed, edited, deleted]
 
-# Corregimos la sintaxis de los permisos
+# Permisos actualizados
 permissions:
   contents: write    # Para repo y wiki
   pages: write      # Para GitHub Pages
   id-token: write   # Para autenticación
-  issues: read          # Para leer issues
+  issues: write     # Para issues
   pull-requests: write  # Para PR y merge
   repository-projects: write
-  actions: read         # Para acceder a las acciones
+  actions: write    # Para acceder a las acciones
   deployments: write    # Para despliegues
   statuses: write       # Para actualizar estados
+  wiki: write       # Permiso específico para wiki
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
 
 jobs:
   build:
     name: Build MercadoPago Documentation
     runs-on: ubuntu-latest
     steps:
+      - name: Configure Git
+        run: |
+          git config --global user.name "EchavarriaLander"
+          git config --global user.email "l.echavarria@alumno.um.edu.ar"
+          git config --global credential.helper store
+          echo "https://EchavarriaLander:${{ secrets.WIKI_TOKEN }}@github.com" > ~/.git-credentials
+
       - name: Checkout MercadoPago Service
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.WIKI_TOKEN }}
       
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -46,7 +56,7 @@ jobs:
 
       - name: Fetch MercadoPago Service Issues and Milestones
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
         run: |
           python scripts/fetch_github_data.py
 
@@ -56,10 +66,8 @@ jobs:
 
       - name: Generate MercadoPago Wiki
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           python scripts/generate_wiki.py
       
       - name: Setup Pages
