@@ -52,8 +52,6 @@ def verify_token():
     token = os.environ.get('WIKI_TOKEN')
     if not token:
         raise WikiGenerationError("WIKI_TOKEN no encontrado en variables de entorno")
-    if not token.strip():
-        raise WikiGenerationError("WIKI_TOKEN está vacío")
     return token
 
 def generate_wiki_pages():
@@ -322,15 +320,11 @@ def check_repo_access(api_url, headers):
         # Verificar permisos específicos para wiki
         permissions = repo_data.get('permissions', {})
         
-        # Verificar todos los permisos necesarios
-        if not permissions.get('push'):
+        # Solo verificar que el token tenga acceso al repositorio
+        if not permissions:
             print("Permisos actuales:", permissions)  # Debug
-            raise WikiGenerationError("El token no tiene permisos de escritura")
-        if not permissions.get('pull'):
-            raise WikiGenerationError("El token no tiene permisos de lectura")
-        if not repo_data.get('has_wiki') and not permissions.get('admin'):
-            raise WikiGenerationError("La wiki está deshabilitada y el token no tiene permisos para habilitarla")
-        
+            raise WikiGenerationError("No se pudieron obtener los permisos del repositorio")
+            
         return repo_data
     except requests.exceptions.RequestException as e:
         if response.status_code == 401:
