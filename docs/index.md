@@ -1,40 +1,34 @@
 ---
-layout: default
+layout: home
+title: Documentación
+description: Documentación de la plataforma de streaming
 ---
 
-# Platforma de Stream - Netflis
+# Bienvenido a la documentación del servicio de streaming.
 
-Bienvenido a la documentación del servicio de streaming con integración de MercadoPago.
+## Descripción General
 
-## Descripción
-
-Este proyecto implementa una plataforma de streaming similar a Netflix con integración de MercadoPago para gestionar suscripciones y pagos de los usuarios. Nuestra plataforma ofrece contenido multimedia a través de una interfaz intuitiva y moderna. Tiene un sistema de recomendación automatica para que los usuarios siempre tengan una opcion disponible a su dispoosición.
+Este proyecto implementa una plataforma de streaming similar a Netflix. Nuestra plataforma ofrece contenido multimedia a través de una interfaz intuitiva y moderna. Tiene un sistema de gestión eficiente de usuarios y contenido.
 
 ## Características Principales
 
-- Interfaz de usuario similar a Netflix con catálogo de películas y series
-- Sistema de recomendaciones personalizado
-- Reproducción de contenido en diferentes calidades
-- Perfiles de usuario múltiples por cuenta
-- Integración con MercadoPago para:
-  - Gestión de suscripciones mensuales/anuales
-  - Procesamiento de pagos en tiempo real
-  - Notificaciones de estado de pago
-  - Renovación automática de suscripciones
+- Sistema de autenticación y autorización
+- Gestión de perfiles de usuario
+- Catálogo de contenido
+- Interfaz de usuario moderna
+- Gestión de suscripciones y pagos
+- Panel de administración
 
-## Documentación
+## Tecnologías Usadas
 
-- [Documentación Detallada del Proyecto](project-documentation.html) - Documentación generada automáticamente con:
-  - Estado actual de los Milestones
-  - Lista de Issues activos y cerrados
-  - Historial de cambios recientes
-
-## Estado del Proyecto
-
-El estado actual del proyecto y sus avances se pueden consultar en la [Documentación Detallada](project-documentation.html), que se actualiza automáticamente.
+- Frontend: React, TypeScript, Tailwind CSS
+- Backend: Node.js, Express
+- Base de datos: PostgreSQL
+- Docker para containerización
+- CI/CD con GitHub Actions
 
 ## Enlaces Útiles
 
-- [Repositorio en GitHub](https://github.com/EchavarriaLander/2025-frontend-EchavarriaLander)
-- [Wiki del Proyecto](https://github.com/EchavarriaLander/2025-frontend-EchavarriaLander/wiki)
-- [Documentación de MercadoPago](https://www.mercadopago.com.ar/developers/es/reference) 
+- [Documentación de la API](api.md)
+- [Guía de Contribución](contributing.md)
+- [Guía de Instalación](installation.md) 
