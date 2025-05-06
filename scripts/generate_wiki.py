@@ -197,9 +197,9 @@ def generate_wiki_content(wiki_dir: Path, data_dir: Path):
     try:
         # Home.md
         with open(wiki_dir / 'Home.md', 'w', encoding='utf-8') as f:
-            f.write("""# UM Tesorería MercadoPago Service Wiki
+            f.write("""# Plataforma de Streaming Wiki
 
-Bienvenido a la Wiki del servicio de integración con MercadoPago de UM Tesorería.
+Bienvenido a la Wiki de la Plataforma de Streaming.
 
 ## Navegación Rápida
 
@@ -210,7 +210,7 @@ Bienvenido a la Wiki del servicio de integración con MercadoPago de UM Tesorer�
 
         # Milestones.md
         with open(wiki_dir / 'Milestones.md', 'w', encoding='utf-8') as f:
-            f.write("# Milestones del Servicio MercadoPago\n\n")
+            f.write("# Milestones del Proyecto\n\n")
             for ms in milestones:
                 f.write(f"## {ms['title']}\n")
                 f.write(f"**Estado:** {ms['state']}\n\n")
@@ -238,7 +238,7 @@ Bienvenido a la Wiki del servicio de integración con MercadoPago de UM Tesorer�
 
         active_issues = [i for i in issues if i['state'] == 'open']
         with open(wiki_dir / 'Issues-Activos.md', 'w', encoding='utf-8') as f:
-            f.write("# Issues Activos - Servicio MercadoPago\n\n")
+            f.write("# Issues Activos\n\n")
             for issue in active_issues:
                 f.write(f"## #{issue['number']}: {issue['title']}\n")
                 f.write(f"**Creado:** {issue['created_at']}\n\n")
@@ -250,39 +250,35 @@ Bienvenido a la Wiki del servicio de integración con MercadoPago de UM Tesorer�
                     else:
                         milestone_title = issue['milestone']
                     f.write(f"**Milestone:** {milestone_title}\n\n")
-                if issue.get('labels'):
-                    labels = format_labels(issue['labels'])
-                    if labels:
-                        f.write(f"**Labels:** {', '.join(labels)}\n\n")
-                body = issue.get('body') or 'Sin descripción'
-                f.write(f"{body}\n\n---\n\n")
+                labels = format_labels(issue.get('labels', []))
+                if labels:
+                    f.write("**Labels:** " + ", ".join(labels) + "\n\n")
+                f.write(f"{issue.get('body', 'Sin descripción')}\n\n")
+                f.write("---\n\n")
 
         # Issues-Cerrados.md
         closed_issues = [i for i in issues if i['state'] == 'closed']
         with open(wiki_dir / 'Issues-Cerrados.md', 'w', encoding='utf-8') as f:
-            f.write("# Issues Cerrados - Servicio MercadoPago\n\n")
+            f.write("# Issues Cerrados\n\n")
             for issue in closed_issues:
                 f.write(f"## #{issue['number']}: {issue['title']}\n")
                 f.write(f"**Creado:** {issue['created_at']}\n")
-                f.write(f"**Cerrado:** {issue.get('closed_at', 'Desconocido')}\n\n")
+                f.write(f"**Cerrado:** {issue.get('closed_at', 'N/A')}\n\n")
                 if issue.get('milestone'):
-                    # Si milestone es un diccionario
                     if isinstance(issue['milestone'], dict):
                         milestone_title = issue['milestone'].get('title', 'Sin título')
-                    # Si milestone es un string
                     else:
                         milestone_title = issue['milestone']
                     f.write(f"**Milestone:** {milestone_title}\n\n")
-                if issue.get('labels'):
-                    labels = format_labels(issue['labels'])
-                    if labels:
-                        f.write(f"**Labels:** {', '.join(labels)}\n\n")
-                body = issue.get('body') or 'Sin descripción'
-                f.write(f"{body}\n\n---\n\n")
+                labels = format_labels(issue.get('labels', []))
+                if labels:
+                    f.write("**Labels:** " + ", ".join(labels) + "\n\n")
+                f.write(f"{issue.get('body', 'Sin descripción')}\n\n")
+                f.write("---\n\n")
 
         return True
-    except IOError as e:
-        print(f"Error escribiendo archivos de la wiki del Servicio MercadoPago: {e}")
+    except Exception as e:
+        print(f"Error escribiendo archivos de la wiki: {e}")
         return False
 
 def verify_json_content(file_path):

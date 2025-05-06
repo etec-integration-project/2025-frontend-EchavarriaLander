@@ -63,7 +63,7 @@ def fetch_github_data():
             'labels': [label.name for label in pr.labels],
             'milestone': pr.milestone.title if pr.milestone else None,
             'assignees': [assignee.login for assignee in pr.assignees],
-            'related_issues': [issue.number for issue in pr.get_issues()]
+            'related_issues': [issue.number for issue in repo.get_issues(state='all') if f"#{pr.number}" in (issue.body or '')]
         }
         prs_data.append(pr_data)
     
