@@ -24,7 +24,6 @@ permissions:
   actions: write    # Para acceder a las acciones
   deployments: write    # Para despliegues
   statuses: write       # Para actualizar estados
-  wiki: write       # Permiso específico para wiki
 
 env:
   WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
