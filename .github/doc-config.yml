@@ -1,3 +1,20 @@
+# Configuración para la generación de documentación
+repository:
+  name: 2025-frontend-EchavarriaLander
+  owner: etec-integration-project
+
+# Configuración de la documentación
+documentation:
+  title: "Plataforma de Streaming"
+  description: "Documentación de la plataforma de streaming"
+  sections:
+    - name: "Guía de Usuario"
+      path: "user-guide"
+    - name: "Guía de Desarrollo"
+      path: "developer-guide"
+    - name: "API"
+      path: "api"
+
 # Configuración de la documentación automática
 documentation:
   # Rutas de los archivos de salida
