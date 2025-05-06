@@ -1,11 +1,11 @@
-name: Deploy MercadoPago Service Documentation
+name: Deploy Documentation
 
 on:
   schedule:
     - cron: '0 0 * * *'  # Corre diariamente
   workflow_dispatch:      # Permite ejecutar manualmente
   push:
-    branches: [ "main" ]  # Solo en la rama principal
+    branches: [ "Documentacion" ]  # Cambiado a la rama Documentacion
   issues:
     types: [opened, closed, edited, deleted]
   milestone:
@@ -30,7 +30,7 @@ env:
 
 jobs:
   build:
-    name: Build MercadoPago Documentation
+    name: Build Documentation
     runs-on: ubuntu-latest
     steps:
       - name: Configure Git
@@ -40,7 +40,7 @@ jobs:
           git config --global credential.helper store
           echo "https://EchavarriaLander:${{ secrets.WIKI_TOKEN }}@github.com" > ~/.git-credentials
 
-      - name: Checkout MercadoPago Service
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.WIKI_TOKEN }}
@@ -55,13 +55,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install PyGithub markdown2 jinja2 requests pyyaml
 
-      - name: Fetch MercadoPago Service Issues and Milestones
+      - name: Fetch Issues and Milestones
         env:
           WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
         run: |
           python scripts/fetch_github_data.py
 
-      - name: Generate MercadoPago Documentation
+      - name: Generate Documentation
         run: |
           python scripts/generate_docs.py
 
@@ -69,7 +69,7 @@ jobs:
         run: |
           python scripts/generate_release_notes.py
 
-      - name: Generate MercadoPago Wiki
+      - name: Generate Wiki
         env:
           WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
         run: |
@@ -90,13 +90,13 @@ jobs:
           path: ./_site
       
   deploy:
-    name: Deploy MercadoPago Documentation
+    name: Deploy Documentation
     needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy MercadoPago Documentation to GitHub Pages
+      - name: Deploy Documentation to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4 
