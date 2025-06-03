@@ -3,8 +3,13 @@ services:
     build:
       context: ./Frontend
       dockerfile: Dockerfile
+      target: dev
     ports:
-      - "5173:80"
+      - "5173:5173"
+    volumes:
+      - ./Frontend:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev", "--", "--host"]
     depends_on:
       - backend
     networks:
@@ -19,8 +24,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5174:3000"
+    volumes:
+      - ./Backend:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev"]
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - DB_HOST=mysql
       - DB_USER=root
       - DB_PASSWORD=secret

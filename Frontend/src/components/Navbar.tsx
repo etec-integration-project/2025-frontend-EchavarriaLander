@@ -5,6 +5,7 @@ import NotificationsPanel from './NotificationsPanel';
 import ProfileMenu from './ProfileMenu';
 import LogoutDialog from './LogoutDialog';
 import { useProfile } from '../contexts/ProfileContext';
+import SearchModal from './SearchModal';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -54,6 +55,8 @@ const Navbar = () => {
               <Link to="/tv-shows" className="text-sm hover:text-gray-300">Series</Link>
               <Link to="/movies" className="text-sm hover:text-gray-300">Películas</Link>
               <Link to="/popular" className="text-sm hover:text-gray-300">Novedades populares</Link>
+              <Link to="/likes" className="text-sm hover:text-gray-300">Likes</Link>
+              <Link to="/my-list" className="text-sm hover:text-gray-300">Mi Lista</Link>
             </div>
           </div>
 
@@ -70,12 +73,9 @@ const Navbar = () => {
                   {isSearchOpen ? <X className="w-5 h-5" /> : <Search className="w-5 h-5" />}
                 </button>
                 {isSearchOpen && (
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    placeholder="Títulos, personas, géneros"
-                    className="bg-transparent outline-none text-sm w-full px-2 py-1"
-                  />
+                  <div className="absolute left-0 top-full w-[350px] z-50">
+                    <SearchModal onClose={() => setIsSearchOpen(false)} />
+                  </div>
                 )}
               </div>
             </div>
@@ -99,8 +99,8 @@ const Navbar = () => {
                 onMouseEnter={() => setIsProfileMenuOpen(true)}
               >
                 <img
-                  src={currentProfile.img}
-                  alt={currentProfile.name}
+                  src={currentProfile?.avatar_url}
+                  alt={currentProfile?.name}
                   className="w-8 h-8 rounded"
                 />
                 <ChevronDown className="w-4 h-4" />

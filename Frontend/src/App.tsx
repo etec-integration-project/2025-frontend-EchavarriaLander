@@ -17,6 +17,9 @@ import PaymentForm from './components/PaymentForm';
 import CreateProfile from './pages/CreateProfile';
 import ProfileManager from './pages/ProfileManager';
 import EditProfile from './pages/EditProfile.tsx';
+import Likes from './pages/Likes';
+import MyList from './pages/MyList';
+import SearchResults from './pages/SearchResults';
 
 function App() {
   return (
@@ -35,6 +38,9 @@ function App() {
             <Route path="/profiles/manage" element={<ProfileManager />} />
             <Route path="/profiles/edit/:id" element={<EditProfile />} />
             <Route path="/watch/:id" element={<Watch />} />
+            <Route path="/likes" element={<Likes />} />
+            <Route path="/my-list" element={<MyList />} />
+            <Route path="/search/:query" element={<SearchResults />} />
             <Route
               path="/*"
               element={
