@@ -6,7 +6,17 @@ import HeroVideo from '../components/HeroVideo';
 import { useProfile } from '../contexts/ProfileContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-  
+
+const TMDB_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NzI0YjJkMGFlYWMxMTRkNWVlMDIxMzQ1OTkyZmUzMiIsIm5iZiI6MTc0ODM2MzY1MS4zMTcsInN1YiI6IjY4MzVlOTgzZDliMDNiYjI3MTA1NWQ1NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Gf-snsYL4XJ6W2x3XNs5L_P75Ay9His4W7SC2zSvOA8";
+
+const GENRES = [
+  { name: 'Acción', id: 28 },
+  { name: 'Comedia', id: 35 },
+  { name: 'Drama', id: 18 },
+  { name: 'Terror', id: 27 },
+  { name: 'Ciencia Ficción', id: 878 },
+];
+
 interface Movie {
   id: number;
   title: string;
@@ -17,6 +27,7 @@ interface Movie {
   genres: string[];
   match: number;
   videoUrl: string;
+  description: string;
 }
 
 const MovieRow = ({
@@ -41,8 +52,6 @@ const MovieRow = ({
   return (
     <div className="mb-8 relative">
       <h2 className="text-xl font-semibold mb-4 px-4 md:px-16">{title}</h2>
-
-      {/* Botón de Scroll Izquierda */}
       <button
         onClick={scrollLeft}
         className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full z-10"
@@ -50,8 +59,6 @@ const MovieRow = ({
       >
         <ChevronLeft className="w-6 h-6" />
       </button>
-
-      {/* Contenedor de Películas con Referencia */}
       <div
         className="flex space-x-4 overflow-x-scroll scroll-smooth px-4 md:px-16 scrollbar-hide scrollbar-thumb-gray-600 scrollbar-track-transparent"
         ref={rowRef}
@@ -62,8 +69,6 @@ const MovieRow = ({
           </div>
         ))}
       </div>
-
-      {/* Botón de Scroll Derecha */}
       <button
         onClick={scrollRight}
         className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 hover:bg-opacity-75 text-white p-2 rounded-full z-10"
@@ -79,301 +84,66 @@ const Browse = () => {
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
   const { currentProfile } = useProfile();
   const [key, setKey] = useState(0);
+  const [moviesByGenre, setMoviesByGenre] = useState<{ [genre: string]: Movie[] }>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Cada vez que cambie el perfil, actualizamos la key para forzar el re-render
     setKey(prev => prev + 1);
   }, [currentProfile]);
 
-  const actionContent: Movie[] = [
-    {
-      id: 1,
-      title: "John Wick",
-      image: "/movies/john-wick.jpg",
-      duration: "1h 41m",
-      rating: "16+",
-      year: 2014,
-      genres: ["Acción", "Thriller"],
-      match: 95,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 2,
-      title: "Mad Max: Fury Road",
-      image: "/movies/mad-max.jpg",
-      duration: "2h",
-      rating: "16+",
-      year: 2015,
-      genres: ["Acción", "Aventura"],
-      match: 97,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 101,
-      title: "The Mandalorian",
-      image: "/shows/mandalorian.jpg",
-      duration: "45m",
-      rating: "13+",
-      year: 2019,
-      genres: ["Acción", "Ciencia ficción"],
-      match: 95,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 102,
-      title: "24",
-      image: "/shows/24.jpg",
-      duration: "45m",
-      rating: "16+",
-      year: 2001,
-      genres: ["Acción", "Drama"],
-      match: 94,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 103,
-      title: "Daredevil",
-      image: "/shows/daredevil.jpg",
-      duration: "50m",
-      rating: "16+",
-      year: 2015,
-      genres: ["Acción", "Crimen"],
-      match: 96,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    }
-  ];
-
-  const comedyContent: Movie[] = [
-    {
-      id: 6,
-      title: "Superbad",
-      image: "/movies/superbad.jpg",
-      duration: "1h 53m",
-      rating: "16+",
-      year: 2007,
-      genres: ["Comedia"],
-      match: 92,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 7,
-      title: "The Hangover",
-      image: "/movies/hangover.jpg",
-      duration: "1h 40m",
-      rating: "16+",
-      year: 2009,
-      genres: ["Comedia"],
-      match: 93,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 106,
-      title: "Friends",
-      image: "/shows/friends.jpg",
-      duration: "22m",
-      rating: "13+",
-      year: 1994,
-      genres: ["Comedia", "Romance"],
-      match: 96,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 107,
-      title: "The Office (US)",
-      image: "/shows/the-office.jpg",
-      duration: "22m",
-      rating: "13+",
-      year: 2005,
-      genres: ["Comedia"],
-      match: 94,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 108,
-      title: "Brooklyn Nine-Nine",
-      image: "/shows/brooklyn99.jpg",
-      duration: "22m",
-      rating: "13+",
-      year: 2013,
-      genres: ["Comedia", "Crimen"],
-      match: 95,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    }
-  ];
-
-  const dramaContent: Movie[] = [
-    {
-      id: 11,
-      title: "The Shawshank Redemption",
-      image: "/movies/shawshank.jpg",
-      duration: "2h 22m",
-      rating: "16+",
-      year: 1994,
-      genres: ["Drama"],
-      match: 98,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 12,
-      title: "The Godfather",
-      image: "/movies/godfather.jpg",
-      duration: "2h 55m",
-      rating: "16+",
-      year: 1972,
-      genres: ["Drama", "Crimen"],
-      match: 99,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 111,
-      title: "Breaking Bad",
-      image: "/shows/breaking-bad.jpg",
-      duration: "50m",
-      rating: "16+",
-      year: 2008,
-      genres: ["Drama", "Crimen"],
-      match: 98,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 112,
-      title: "The Crown",
-      image: "/shows/crown.jpg",
-      duration: "58m",
-      rating: "16+",
-      year: 2016,
-      genres: ["Drama", "Historia"],
-      match: 95,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 113,
-      title: "The Handmaid's Tale",
-      image: "/shows/handmaids-tale.jpg",
-      duration: "50m",
-      rating: "16+",
-      year: 2017,
-      genres: ["Drama", "Ciencia ficción"],
-      match: 95,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    }
-  ];
-
-  const horrorContent: Movie[] = [
-    {
-      id: 16,
-      title: "The Conjuring",
-      image: "/movies/conjuring.jpg",
-      duration: "1h 52m",
-      rating: "16+",
-      year: 2013,
-      genres: ["Terror", "Suspenso"],
-      match: 95,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 17,
-      title: "Hereditary",
-      image: "/movies/hereditary.jpg",
-      duration: "2h 7m",
-      rating: "16+",
-      year: 2018,
-      genres: ["Terror", "Drama"],
-      match: 93,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 116,
-      title: "American Horror Story",
-      image: "/shows/ahs.jpg",
-      duration: "45m",
-      rating: "16+",
-      year: 2011,
-      genres: ["Terror", "Drama"],
-      match: 94,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 117,
-      title: "The Walking Dead",
-      image: "/shows/walking-dead.jpg",
-      duration: "45m",
-      rating: "16+",
-      year: 2010,
-      genres: ["Terror", "Drama"],
-      match: 92,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 118,
-      title: "Stranger Things",
-      image: "/shows/stranger-things.jpg",
-      duration: "50m",
-      rating: "16+",
-      year: 2016,
-      genres: ["Terror", "Ciencia ficción"],
-      match: 96,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    }
-  ];
-
-  const scifiContent: Movie[] = [
-    {
-      id: 21,
-      title: "Blade Runner 2049",
-      image: "/movies/blade-runner.jpg",
-      duration: "2h 44m",
-      rating: "16+",
-      year: 2017,
-      genres: ["Ciencia ficción", "Drama"],
-      match: 96,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 22,
-      title: "Interstellar",
-      image: "/movies/interstellar.jpg",
-      duration: "2h 49m",
-      rating: "13+",
-      year: 2014,
-      genres: ["Ciencia ficción", "Drama"],
-      match: 97,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 121,
-      title: "Black Mirror",
-      image: "/shows/black-mirror.jpg",
-      duration: "60m",
-      rating: "16+",
-      year: 2011,
-      genres: ["Ciencia ficción", "Drama"],
-      match: 96,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 122,
-      title: "The Expanse",
-      image: "/shows/expanse.jpg",
-      duration: "45m",
-      rating: "16+",
-      year: 2015,
-      genres: ["Ciencia ficción", "Drama"],
-      match: 95,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    },
-    {
-      id: 123,
-      title: "Westworld",
-      image: "/shows/westworld.jpg",
-      duration: "60m",
-      rating: "16+",
-      year: 2016,
-      genres: ["Ciencia ficción", "Drama"],
-      match: 94,
-      videoUrl: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4"
-    }
-  ];
+  useEffect(() => {
+    const fetchMovies = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const genreResults: { [genre: string]: Movie[] } = {};
+        // Obtener lista de géneros de TMDB
+        const genreListRes = await fetch('https://api.themoviedb.org/3/genre/movie/list?language=es-ES', {
+          headers: {
+            Authorization: `Bearer ${TMDB_TOKEN}`,
+            accept: 'application/json',
+          },
+        });
+        const genreListData = await genreListRes.json();
+        type Genre = { id: number; name: string };
+        const genreMap: Record<number, string> = {};
+        (genreListData.genres as Genre[] || []).forEach((g) => { genreMap[g.id] = g.name; });
+        for (const genre of GENRES) {
+          const res = await fetch(
+            `https://api.themoviedb.org/3/discover/movie?with_genres=${genre.id}&sort_by=popularity.desc&language=es-ES&page=1`,
+            {
+              headers: {
+                Authorization: `Bearer ${TMDB_TOKEN}`,
+                accept: 'application/json',
+              },
+            }
+          );
+          const data = await res.json();
+          genreResults[genre.name] = (data.results || []).map((movie: any) => ({
+            id: movie.id,
+            title: movie.title,
+            image: movie.poster_path
+              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+              : 'https://via.placeholder.com/500x750?text=Sin+Imagen',
+            duration: '',
+            rating: movie.adult ? '18+' : '13+',
+            year: movie.release_date ? parseInt(movie.release_date.split('-')[0]) : 0,
+            genres: (movie.genre_ids || []).map((gid: number) => genreMap[gid]).filter((name: unknown): name is string => typeof name === 'string'),
+            match: Math.floor((movie.vote_average || 0) * 10),
+            videoUrl: '',
+            description: movie.overview || '',
+          }));
+        }
+        setMoviesByGenre(genreResults);
+      } catch (err) {
+        setError('Error al cargar películas de TMDB');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMovies();
+  }, []);
 
   const handlePlayMovie = (movie: Movie) => {
     setSelectedMovie(movie);
@@ -394,15 +164,20 @@ const Browse = () => {
         <HeroVideo
           title="Contenido destacado"
           description="Descubre las mejores películas y series en un solo lugar."
-          onPlay={() => handlePlayMovie(actionContent[0])}
+          onPlay={() => {}}
         />
 
         <div className="pt-4">
-          <MovieRow title="Acción" movies={actionContent} onPlayMovie={handlePlayMovie} />
-          <MovieRow title="Comedia" movies={comedyContent} onPlayMovie={handlePlayMovie} />
-          <MovieRow title="Drama" movies={dramaContent} onPlayMovie={handlePlayMovie} />
-          <MovieRow title="Terror" movies={horrorContent} onPlayMovie={handlePlayMovie} />
-          <MovieRow title="Ciencia Ficción" movies={scifiContent} onPlayMovie={handlePlayMovie} />
+          {loading && <div className="text-gray-400 text-center">Cargando películas...</div>}
+          {error && <div className="text-red-500 text-center">{error}</div>}
+          {!loading && !error && GENRES.map((genre) => (
+            <MovieRow
+              key={genre.id}
+              title={genre.name}
+              movies={moviesByGenre[genre.name] || []}
+              onPlayMovie={handlePlayMovie}
+            />
+          ))}
         </div>
 
         <Footer />

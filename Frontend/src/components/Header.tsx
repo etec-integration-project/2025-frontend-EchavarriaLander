@@ -16,13 +16,7 @@ const Header = ({ showNav = false, showSignIn = false }: HeaderProps) => {
         <Navbar />
       ) : (
         <header className="flex justify-between items-center px-4 md:px-16 py-6">
-          <Link to="/">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-              alt="Netflix"
-              className="h-8 md:h-12"
-            />
-          </Link>
+          {/* Logo eliminado */}
           {showSignIn && (
             <Link
               to="/login"

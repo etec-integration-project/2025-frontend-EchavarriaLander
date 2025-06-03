@@ -15,6 +15,15 @@ COPY . .
 # Build the application
 RUN npm run build
 
+# Development stage
+FROM node:18-alpine as dev
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+EXPOSE 5173
+CMD ["npm", "run", "dev", "--", "--host"]
+
 # Production stage
 FROM nginx:alpine
 
