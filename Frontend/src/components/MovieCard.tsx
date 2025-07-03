@@ -28,11 +28,11 @@ const MovieCard: React.FC<MovieProps> = ({ movie, onPlay, type = 'movie' }) => {
 
   const [liked, setLiked] = React.useState(() => {
     const likes = JSON.parse(localStorage.getItem('likedMovies') || '[]');
-    return likes.includes(movie.id);
+    return likes.some((item: any) => item.id === movie.id && item.type === type);
   });
   const [inList, setInList] = React.useState(() => {
     const list = JSON.parse(localStorage.getItem('myList') || '[]');
-    return list.includes(movie.id);
+    return list.some((item: any) => item.id === movie.id && item.type === type);
   });
 
   const handleCardClick = (e: React.MouseEvent) => {
@@ -50,10 +50,10 @@ const MovieCard: React.FC<MovieProps> = ({ movie, onPlay, type = 'movie' }) => {
     e.stopPropagation();
     const likes = JSON.parse(localStorage.getItem('likedMovies') || '[]');
     let newLikes;
-    if (likes.includes(movie.id)) {
-      newLikes = likes.filter((id: number) => id !== movie.id);
+    if (likes.some((item: any) => item.id === movie.id && item.type === type)) {
+      newLikes = likes.filter((item: any) => !(item.id === movie.id && item.type === type));
     } else {
-      newLikes = [...likes, movie.id];
+      newLikes = [...likes, { id: movie.id, type }];
     }
     localStorage.setItem('likedMovies', JSON.stringify(newLikes));
     setLiked(!liked);
@@ -63,10 +63,10 @@ const MovieCard: React.FC<MovieProps> = ({ movie, onPlay, type = 'movie' }) => {
     e.stopPropagation();
     const list = JSON.parse(localStorage.getItem('myList') || '[]');
     let newList;
-    if (list.includes(movie.id)) {
-      newList = list.filter((id: number) => id !== movie.id);
+    if (list.some((item: any) => item.id === movie.id && item.type === type)) {
+      newList = list.filter((item: any) => !(item.id === movie.id && item.type === type));
     } else {
-      newList = [...list, movie.id];
+      newList = [...list, { id: movie.id, type }];
     }
     localStorage.setItem('myList', JSON.stringify(newList));
     setInList(!inList);
@@ -80,44 +80,44 @@ const MovieCard: React.FC<MovieProps> = ({ movie, onPlay, type = 'movie' }) => {
         className="rounded-md w-full object-cover transition-transform duration-300 group-hover:scale-105 group-hover:opacity-20"
       />
       {/* Hover Overlay */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-black/70 rounded-md flex flex-col justify-between p-4 z-10">
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-piraflix-black/90 rounded-md flex flex-col justify-between p-4 z-10">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h3 className="font-bold text-lg text-white flex-1 break-words whitespace-normal">{movie.title}</h3>
+            <h3 className="font-bold text-lg text-piraflix-gold flex-1 break-words whitespace-normal">{movie.title}</h3>
             {movie.year > 0 && (
-              <span className="text-xs text-gray-300 bg-gray-700 rounded px-2 py-0.5 ml-1">{movie.year}</span>
+              <span className="text-xs text-piraflix-accent bg-piraflix-gray rounded px-2 py-0.5 ml-1">{movie.year}</span>
             )}
             {movie.rating && (
-              <span className="text-xs text-gray-300 border border-gray-500 rounded px-2 py-0.5 ml-1">{movie.rating}</span>
+              <span className="text-xs text-piraflix-accent border border-piraflix-gold rounded px-2 py-0.5 ml-1">{movie.rating}</span>
             )}
           </div>
           <div className="flex items-center gap-2 mb-2">
-            <span className="flex items-center text-yellow-400 text-xs font-semibold">
-              <Star className="w-4 h-4 mr-1" fill="#facc15" />
+            <span className="flex items-center text-piraflix-gold text-xs font-semibold">
+              <Star className="w-4 h-4 mr-1" fill="#FFD700" />
               {movie.match}/100
             </span>
             {mainGenre && (
-              <span className="text-xs text-gray-400 bg-gray-800 rounded px-2 py-0.5 ml-1">{mainGenre}</span>
+              <span className="text-xs text-piraflix-accent bg-piraflix-gray rounded px-2 py-0.5 ml-1">{mainGenre}</span>
             )}
             {movie.seasons && (
-              <span className="text-xs text-blue-300 bg-blue-900 rounded px-2 py-0.5 ml-1">{movie.seasons}</span>
+              <span className="text-xs text-piraflix-red bg-piraflix-gold rounded px-2 py-0.5 ml-1">{movie.seasons}</span>
             )}
           </div>
-          <p className="text-gray-200 text-xs mb-3 line-clamp-4 min-h-[3.5em]">{movie.description || 'Sin descripción disponible.'}</p>
+          <p className="text-piraflix-accent text-xs mb-3 line-clamp-4 min-h-[3.5em]">{movie.description || 'Sin descripción disponible.'}</p>
         </div>
         <div className="flex items-center space-x-3 mt-2">
           <button 
             onClick={() => onPlay(movie)}
-            className="bg-white rounded-full p-2 hover:bg-white/90 transition-colors shadow"
+            className="bg-piraflix-gold rounded-full p-2 hover:bg-piraflix-red hover:text-piraflix-accent transition-colors shadow"
             title="Reproducir"
           >
-            <Play className="w-5 h-5 text-black" fill="black" />
+            <Play className="w-5 h-5 text-piraflix-black" fill="#181818" />
           </button>
-          <button className={`border-2 rounded-full p-2 transition-colors shadow ${inList ? 'border-green-500' : 'border-gray-400 hover:border-white'}`} title="Agregar a mi lista" onClick={handleAddToList}>
-            <Plus className={`w-5 h-5 ${inList ? 'text-green-500' : 'text-white'}`} />
+          <button className={`border-2 rounded-full p-2 transition-colors shadow ${inList ? 'border-piraflix-gold bg-piraflix-gold/20' : 'border-piraflix-accent hover:border-piraflix-gold'}`} title="Agregar a mi lista" onClick={handleAddToList}>
+            <Plus className={`w-5 h-5 ${inList ? 'text-piraflix-gold' : 'text-piraflix-accent'}`} />
           </button>
-          <button className={`border-2 rounded-full p-2 transition-colors shadow ${liked ? 'border-pink-500' : 'border-gray-400 hover:border-white'}`} title="Me gusta" onClick={handleLike}>
-            <ThumbsUp className={`w-5 h-5 ${liked ? 'text-pink-500' : 'text-white'}`} />
+          <button className={`border-2 rounded-full p-2 transition-colors shadow ${liked ? 'border-piraflix-red bg-piraflix-red/20' : 'border-piraflix-accent hover:border-piraflix-red'}`} title="Me gusta" onClick={handleLike}>
+            <ThumbsUp className={`w-5 h-5 ${liked ? 'text-piraflix-red' : 'text-piraflix-accent'}`} />
           </button>
         </div>
       </div>

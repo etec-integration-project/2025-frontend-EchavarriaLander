@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, Bell, ChevronDown, X } from 'lucide-react';
 import NotificationsPanel from './NotificationsPanel';
@@ -39,24 +39,24 @@ const Navbar = () => {
   return (
     <>
       <nav className={`fixed w-full z-50 transition-colors duration-300 ${
-        isScrolled ? 'bg-black' : 'bg-gradient-to-b from-black/70 to-transparent'
+        isScrolled ? 'bg-piraflix' : 'bg-gradient-to-b from-[var(--piraflix-black)] to-transparent'
       }`}>
         <div className="px-4 md:px-16 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <Link to="/browse">
               <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-                alt="Netflix"
-                className="h-5 md:h-7"
+                src="/assets/Piraflix_logo.png"
+                alt="PiraFlix"
+                className="h-10 md:h-14 drop-shadow-lg"
               />
             </Link>
             <div className="hidden md:flex items-center space-x-4">
-              <Link to="/browse" className="text-sm hover:text-gray-300">Inicio</Link>
-              <Link to="/tv-shows" className="text-sm hover:text-gray-300">Series</Link>
-              <Link to="/movies" className="text-sm hover:text-gray-300">Películas</Link>
-              <Link to="/popular" className="text-sm hover:text-gray-300">Novedades populares</Link>
-              <Link to="/likes" className="text-sm hover:text-gray-300">Likes</Link>
-              <Link to="/my-list" className="text-sm hover:text-gray-300">Mi Lista</Link>
+              <Link to="/browse" className="text-sm text-piraflix-gold hover:text-piraflix-red transition">Inicio</Link>
+              <Link to="/tv-shows" className="text-sm text-piraflix-gold hover:text-piraflix-red transition">Series</Link>
+              <Link to="/movies" className="text-sm text-piraflix-gold hover:text-piraflix-red transition">Películas</Link>
+              <Link to="/popular" className="text-sm text-piraflix-gold hover:text-piraflix-red transition">Novedades populares</Link>
+              <Link to="/likes" className="text-sm text-piraflix-gold hover:text-piraflix-red transition">Likes</Link>
+              <Link to="/my-list" className="text-sm text-piraflix-gold hover:text-piraflix-red transition">Mi Lista</Link>
             </div>
           </div>
 

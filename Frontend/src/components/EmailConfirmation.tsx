@@ -36,8 +36,8 @@ const EmailConfirmation = () => {
       <header className="px-4 md:px-16 py-6 border-b">
         <Link to="/">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-            alt="Netflix"
+            src="/assets/piraflix-logo.png"
+            alt="PiraFlix"
             className="h-8 md:h-12"
           />
         </Link>
@@ -47,7 +47,7 @@ const EmailConfirmation = () => {
         <div>
           <p className="text-xs text-black mb-2">PASO 1 DE 3</p>
           <h1 className="text-3xl font-medium text-black mb-4">¡Hola de nuevo!</h1>
-          <h2 className="text-xl text-black mb-4">Suscribirte a Netflix es fácil.</h2>
+          <h2 className="text-xl text-black mb-4">Suscribirte a PiraFlix es fácil.</h2>
           <p className="text-lg text-black mb-4">Ingresa tu contraseña para comenzar a ver al instante.</p>
           
           {error && (

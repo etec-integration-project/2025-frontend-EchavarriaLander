@@ -44,8 +44,8 @@ const PaymentForm = () => {
       <header className="px-4 md:px-16 py-6 border-b">
         <Link to="/">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-            alt="Netflix"
+            src="/assets/piraflix-logo.png"
+            alt="PiraFlix"
             className="h-8 md:h-12"
           />
         </Link>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import MovieCard from '../components/MovieCard';
 import Navbar from '../components/Navbar';
 
@@ -11,24 +11,23 @@ const Likes = () => {
   useEffect(() => {
     const fetchLiked = async () => {
       setLoading(true);
-      const ids = JSON.parse(localStorage.getItem('likedMovies') || '[]');
+      const items = JSON.parse(localStorage.getItem('likedMovies') || '[]');
       const results: any[] = [];
-      for (const id of ids) {
-        // Probar primero como película, si no existe probar como serie
-        let res = await fetch(`https://api.themoviedb.org/3/movie/${id}?language=es-ES`, {
-          headers: { Authorization: `Bearer ${TMDB_TOKEN}` }
-        });
-        let data = await res.json();
-        if (data && !data.status_code) {
-          results.push({ ...data, type: 'movie' });
-          continue;
+      for (const item of items) {
+        let data = null;
+        if (item.type === 'movie') {
+          const res = await fetch(`https://api.themoviedb.org/3/movie/${item.id}?language=es-ES`, {
+            headers: { Authorization: `Bearer ${TMDB_TOKEN}` }
+          });
+          data = await res.json();
+        } else if (item.type === 'tv') {
+          const res = await fetch(`https://api.themoviedb.org/3/tv/${item.id}?language=es-ES`, {
+            headers: { Authorization: `Bearer ${TMDB_TOKEN}` }
+          });
+          data = await res.json();
         }
-        res = await fetch(`https://api.themoviedb.org/3/tv/${id}?language=es-ES`, {
-          headers: { Authorization: `Bearer ${TMDB_TOKEN}` }
-        });
-        data = await res.json();
         if (data && !data.status_code) {
-          results.push({ ...data, type: 'tv' });
+          results.push({ ...data, type: item.type });
         }
       }
       setMovies(results);
@@ -40,12 +39,12 @@ const Likes = () => {
   return (
     <>
       <Navbar />
-      <div className="pt-20 bg-black min-h-screen text-white">
-        <h1 className="text-2xl font-bold mb-6 px-4">Tus Likes</h1>
+      <div className="pt-20 bg-piraflix min-h-screen text-piraflix-accent">
+        <h1 className="text-2xl font-bold mb-6 px-4 text-piraflix-gold">Tus Likes</h1>
         {loading ? (
-          <div className="text-center text-gray-400">Cargando...</div>
+          <div className="text-center text-piraflix-gold">Cargando...</div>
         ) : movies.length === 0 ? (
-          <div className="text-center text-gray-400">No tienes likes aún.</div>
+          <div className="text-center text-piraflix-gold">No tienes likes aún.</div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 px-4">
             {movies.map((movie) => (
