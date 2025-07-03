@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Play, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import VideoPlayer from '../components/VideoPlayer';
 import MovieCard from '../components/MovieCard';
@@ -14,6 +14,9 @@ const GENRES = [
   { name: 'Terror', id: 9648 },
   { name: 'Ciencia Ficción', id: 10765 },
 ];
+
+const BLOCKED_LANGUAGES = ['zh', 'ko', 'ja', 'th', 'hi', 'ta', 'te', 'ml', 'bn', 'kn', 'mr', 'pa', 'gu', 'ur', 'ru'];
+const BLOCKED_COUNTRIES = ['CN', 'KR', 'JP', 'TH', 'IN', 'RU'];
 
 interface Show {
   id: number;
@@ -118,21 +121,28 @@ const TVShows = () => {
             }
           );
           const data = await res.json();
-          genreResults[genre.name] = (data.results || []).map((show: any) => ({
-            id: show.id,
-            title: show.name,
-            image: show.poster_path
-              ? `https://image.tmdb.org/t/p/w500${show.poster_path}`
-              : 'https://via.placeholder.com/500x750?text=Sin+Imagen',
-            duration: '',
-            rating: show.adult ? '18+' : '13+',
-            year: show.first_air_date ? parseInt(show.first_air_date.split('-')[0]) : 0,
-            genres: (show.genre_ids || []).map((gid: number) => genreMap[gid]).filter((name: unknown): name is string => typeof name === 'string'),
-            match: Math.floor((show.vote_average || 0) * 10),
-            videoUrl: '',
-            description: show.overview || '',
-            seasons: show.number_of_seasons ? `${show.number_of_seasons} Temporadas` : '',
-          }));
+          genreResults[genre.name] = (data.results || [])
+            .filter((show: any) => {
+              // Filtrar por idioma y país de origen
+              if (BLOCKED_LANGUAGES.includes(show.original_language)) return false;
+              if (show.origin_country && show.origin_country.some((c: string) => BLOCKED_COUNTRIES.includes(c))) return false;
+              return true;
+            })
+            .map((show: any) => ({
+              id: show.id,
+              title: show.name,
+              image: show.poster_path
+                ? `https://image.tmdb.org/t/p/w500${show.poster_path}`
+                : 'https://via.placeholder.com/500x750?text=Sin+Imagen',
+              duration: '',
+              rating: show.adult ? '18+' : '13+',
+              year: show.first_air_date ? parseInt(show.first_air_date.split('-')[0]) : 0,
+              genres: (show.genre_ids || []).map((gid: number) => genreMap[gid]).filter((name: unknown): name is string => typeof name === 'string'),
+              match: Math.floor((show.vote_average || 0) * 10),
+              videoUrl: '',
+              description: show.overview || '',
+              seasons: show.number_of_seasons ? `${show.number_of_seasons} Temporadas` : '',
+            }));
         }
         setShowsByGenre(genreResults);
       } catch (err) {
@@ -149,7 +159,7 @@ const TVShows = () => {
   };
 
   return (
-    <div key={key} className="pt-20 bg-black min-h-screen">
+    <div key={key} className="pt-20 bg-piraflix min-h-screen">
       {selectedShow && (
         <VideoPlayer
           videoUrl={selectedShow.videoUrl}
@@ -165,8 +175,8 @@ const TVShows = () => {
       />
 
       <div className="pt-8">
-        {loading && <div className="text-gray-400 text-center">Cargando series...</div>}
-        {error && <div className="text-red-500 text-center">{error}</div>}
+        {loading && <div className="text-piraflix-gold text-center">Cargando series...</div>}
+        {error && <div className="text-piraflix-red text-center">{error}</div>}
         {!loading && !error && GENRES.map((genre) => (
           <ShowRow
             key={genre.id}

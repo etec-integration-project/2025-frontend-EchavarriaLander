@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,7 +6,8 @@ const TMDB_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NzI0YjJkMGFlYWMxMTRkNWVlMDI
 
 const SearchModal = ({ onClose }: { onClose: () => void }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState<any[]>([]);
+  const [movieResults, setMovieResults] = useState<any[]>([]);
+  const [tvResults, setTvResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -28,6 +29,14 @@ const SearchModal = ({ onClose }: { onClose: () => void }) => {
             }
           );
           const movieData = await movieRes.json();
+          const movies = (movieData.results || []).map((movie: any) => ({
+            id: movie.id,
+            title: movie.title,
+            type: 'movie',
+            image: movie.poster_path
+              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+              : 'https://via.placeholder.com/500x750?text=Sin+Imagen',
+          }));
           // Buscar series
           const tvRes = await fetch(
             `https://api.themoviedb.org/3/search/tv?query=${encodeURIComponent(searchTerm)}&language=es-ES&page=1`,
@@ -39,15 +48,7 @@ const SearchModal = ({ onClose }: { onClose: () => void }) => {
             }
           );
           const tvData = await tvRes.json();
-          const movieResults = (movieData.results || []).map((movie: any) => ({
-            id: movie.id,
-            title: movie.title,
-            type: 'movie',
-            image: movie.poster_path
-              ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-              : 'https://via.placeholder.com/500x750?text=Sin+Imagen',
-          }));
-          const tvResults = (tvData.results || []).map((tv: any) => ({
+          const tvs = (tvData.results || []).map((tv: any) => ({
             id: tv.id,
             title: tv.name,
             type: 'tv',
@@ -55,14 +56,16 @@ const SearchModal = ({ onClose }: { onClose: () => void }) => {
               ? `https://image.tmdb.org/t/p/w500${tv.poster_path}`
               : 'https://via.placeholder.com/500x750?text=Sin+Imagen',
           }));
-          setResults([...movieResults, ...tvResults]);
+          setMovieResults(movies);
+          setTvResults(tvs);
         } catch (err) {
           setError('Error al buscar películas y series');
         } finally {
           setLoading(false);
         }
       } else {
-        setResults([]);
+        setMovieResults([]);
+        setTvResults([]);
       }
     };
     fetchResults();
@@ -98,6 +101,56 @@ const SearchModal = ({ onClose }: { onClose: () => void }) => {
         </div>
         {loading && <div className="text-gray-400">Buscando...</div>}
         {error && <div className="text-red-500">{error}</div>}
+        {!loading && !error && (movieResults.length > 0 || tvResults.length > 0) && (
+          <div>
+            {movieResults.length > 0 && (
+              <>
+                <div className="text-white text-lg font-bold mb-2 border-b border-gray-700 pb-1">Películas</div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  {movieResults.map((result) => (
+                    <div
+                      key={result.id}
+                      className="cursor-pointer hover:scale-105 transition-transform"
+                      onClick={() => handleResultClick(result)}
+                    >
+                      <img
+                        src={result.image}
+                        alt={result.title}
+                        className="rounded-md w-full object-cover mb-2"
+                      />
+                      <div className="text-white text-sm font-semibold truncate text-center">
+                        {result.title}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+            {tvResults.length > 0 && (
+              <>
+                <div className="text-white text-lg font-bold mb-2 border-b border-gray-700 pb-1">Series</div>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {tvResults.map((result) => (
+                    <div
+                      key={result.id}
+                      className="cursor-pointer hover:scale-105 transition-transform"
+                      onClick={() => handleResultClick(result)}
+                    >
+                      <img
+                        src={result.image}
+                        alt={result.title}
+                        className="rounded-md w-full object-cover mb-2"
+                      />
+                      <div className="text-white text-sm font-semibold truncate text-center">
+                        {result.title}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

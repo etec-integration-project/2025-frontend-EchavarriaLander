@@ -24,3 +24,38 @@
   
   scrollbar-width: none;
 }
+
+:root {
+  --piraflix-gold: #FFD700;
+  --piraflix-gold-dark: #B8860B;
+  --piraflix-red: #C0392B;
+  --piraflix-red-light: #E74C3C;
+  --piraflix-black: #181818;
+  --piraflix-gray: #23272A;
+  --piraflix-accent: #FFF8DC;
+}
+
+body {
+  background: var(--piraflix-black);
+  color: var(--piraflix-accent);
+}
+
+.bg-piraflix {
+  background: var(--piraflix-black);
+}
+
+.text-piraflix-gold {
+  color: var(--piraflix-gold);
+}
+
+.text-piraflix-red {
+  color: var(--piraflix-red);
+}
+
+.bg-piraflix-gold {
+  background: var(--piraflix-gold);
+}
+
+.bg-piraflix-red {
+  background: var(--piraflix-red);
+}

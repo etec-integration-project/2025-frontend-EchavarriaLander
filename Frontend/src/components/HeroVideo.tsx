@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Volume2, VolumeX, Play, Plus } from 'lucide-react';
 
 interface HeroVideoProps {

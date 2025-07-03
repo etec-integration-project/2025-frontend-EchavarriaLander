@@ -69,7 +69,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = ({ isOpen, onClose, onLogout }) 
           className="px-4 py-2 hover:bg-gray-600/30 cursor-pointer"
           onClick={onLogout}
         >
-          Cerrar sesión en Netflix
+          Cerrar sesión en PiraFlix
         </div>
       </div>
     </div>

@@ -37,10 +37,10 @@ const LogoutDialog: React.FC<LogoutDialogProps> = ({ isOpen, onClose }) => {
       <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
         <h2 className="text-2xl font-bold text-black mb-4">¿Ya te vas?</h2>
         <p className="text-gray-600 mb-2">
-          Para que sepas, no hace falta que siempre cierres sesión en Netflix. Solo es necesario si estás en una computadora compartida o pública.
+          Para que sepas, no hace falta que siempre cierres sesión en PiraFlix. Solo es necesario si estás en una computadora compartida o pública.
         </p>
         <p className="text-gray-600 mb-6">
-          Se te redireccionará a Netflix.com en {countdown} segundos.
+          Se te redireccionará a piraflix.com en {countdown} segundos.
         </p>
         <div className="flex justify-center">
           <button

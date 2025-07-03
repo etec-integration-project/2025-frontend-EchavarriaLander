@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
   const footerLinks = [
     {
-      title: 'Acerca de Netflix',
+      title: 'Acerca de PiraFlix',
       links: [
         { text: 'Descripción de la empresa', href: '/about' },
         { text: 'Relaciones con inversionistas', href: '/investors' },
@@ -39,14 +39,14 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { icon: Facebook, href: 'https://facebook.com/netflix' },
-    { icon: Twitter, href: 'https://twitter.com/netflix' },
-    { icon: Instagram, href: 'https://instagram.com/netflix' },
-    { icon: Youtube, href: 'https://youtube.com/netflix' },
+    { icon: Facebook, href: 'https://facebook.com/piraflix' },
+    { icon: Twitter, href: 'https://twitter.com/piraflix' },
+    { icon: Instagram, href: 'https://instagram.com/piraflix' },
+    { icon: Youtube, href: 'https://youtube.com/piraflix' },
   ];
 
   return (
-    <footer className="bg-black text-gray-400 py-16 mt-auto">
+    <footer className="bg-piraflix text-piraflix-accent py-16 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center space-x-4 mb-8">
           {socialLinks.map((social, index) => (
@@ -65,13 +65,13 @@ const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {footerLinks.map((section, index) => (
             <div key={index}>
-              <h3 className="text-sm font-semibold mb-4">{section.title}</h3>
+              <h3 className="text-sm font-semibold mb-4 text-piraflix-gold">{section.title}</h3>
               <ul className="space-y-3">
                 {section.links.map((link, linkIndex) => (
                   <li key={linkIndex}>
                     <Link
                       to={link.href}
-                      className="text-sm hover:text-white transition-colors"
+                      className="text-sm text-piraflix-gold hover:text-piraflix-red transition-colors"
                     >
                       {link.text}
                     </Link>
@@ -82,7 +82,7 @@ const Footer = () => {
           ))}
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-800">
+        <div className="mt-12 pt-8 border-t border-piraflix-gold">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <Globe className="w-5 h-5" />
@@ -91,7 +91,7 @@ const Footer = () => {
                 <option value="en">English</option>
               </select>
             </div>
-            <p className="text-sm">© {new Date().getFullYear()} Netflix, Inc.</p>
+            <p className="text-sm text-piraflix-gold">© {new Date().getFullYear()} PiraFlix</p>
           </div>
         </div>
       </div>

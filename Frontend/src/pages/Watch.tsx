@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import VideoPlayer from '../components/VideoPlayer';
 import { Play } from 'lucide-react';
@@ -110,17 +110,17 @@ const Watch = () => {
     } catch {}
   };
 
-  if (loading) return <div className="text-center text-gray-400 py-20">Cargando...</div>;
-  if (error || !details) return <div className="text-center text-red-500 py-20">{error || 'No encontrado'}</div>;
+  if (loading) return <div className="text-center text-piraflix-gold py-20">Cargando...</div>;
+  if (error || !details) return <div className="text-center text-piraflix-red py-20">{error || 'No encontrado'}</div>;
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-piraflix text-piraflix-accent">
       {/* Backdrop horizontal */}
       {details.backdrop_path && (
         <img
           src={`https://image.tmdb.org/t/p/original${details.backdrop_path}`}
           alt="Backdrop"
-          className="w-full h-64 object-cover mb-4"
+          className="w-full h-64 object-cover mb-4 rounded-b-lg shadow-lg"
         />
       )}
       <div className="max-w-5xl mx-auto px-4 md:px-0 flex flex-col md:flex-row gap-8">
@@ -129,45 +129,45 @@ const Watch = () => {
           <img
             src={details.poster_path ? `https://image.tmdb.org/t/p/w500${details.poster_path}` : 'https://via.placeholder.com/500x750?text=Sin+Imagen'}
             alt={details.title || details.name}
-            className="rounded-lg w-40 md:w-56 shadow-lg"
+            className="rounded-lg w-40 md:w-56 shadow-lg border-2 border-piraflix-gold"
           />
         </div>
         {/* Info principal */}
         <div className="flex-1">
-          <h1 className="text-3xl font-bold mb-2">{details.title || details.name}</h1>
-          <div className="flex items-center gap-3 mb-2">
-            {details.release_date && <span className="text-gray-400">{(details.release_date || details.first_air_date).split('-')[0]}</span>}
+          <h1 className="text-3xl font-bold mb-2 text-piraflix-gold">{details.title || details.name}</h1>
+          <div className="flex items-center gap-3 mb-2 flex-wrap">
+            {details.release_date && <span className="text-piraflix-gold">{(details.release_date || details.first_air_date).split('-')[0]}</span>}
             {details.genres && details.genres.length > 0 && (
-              <span className="text-gray-400">{details.genres.map((g: any) => g.name).join(', ')}</span>
+              <span className="text-piraflix-accent">{details.genres.map((g: any) => g.name).join(', ')}</span>
             )}
-            {details.runtime && <span className="text-gray-400">{details.runtime} min</span>}
-            {details.number_of_seasons && <span className="text-gray-400">{details.number_of_seasons} temporadas</span>}
-            {details.vote_average && <span className="text-yellow-400 font-semibold">⭐ {details.vote_average.toFixed(1)}/10</span>}
+            {details.runtime && <span className="text-piraflix-accent">{details.runtime} min</span>}
+            {details.number_of_seasons && <span className="text-piraflix-accent">{details.number_of_seasons} temporadas</span>}
+            {details.vote_average && <span className="text-piraflix-gold font-semibold">★ {details.vote_average.toFixed(1)}/10</span>}
           </div>
-          <p className="mb-4 text-gray-200 max-w-2xl">{details.overview}</p>
-          <div className="flex gap-4 mb-4">
+          <p className="mb-4 text-piraflix-accent max-w-2xl">{details.overview}</p>
+          <div className="flex gap-4 mb-4 flex-wrap">
             <button
-              className="bg-red-600 hover:bg-red-700 px-6 py-2 rounded font-bold flex items-center gap-2"
+              className="bg-piraflix-red hover:bg-piraflix-gold hover:text-piraflix-black px-6 py-2 rounded font-bold flex items-center gap-2 text-piraflix-accent shadow transition"
               onClick={() => setIsPlaying(true)}
             >
               <Play className="w-5 h-5" /> Reproducir
             </button>
             {trailer && (
               <button
-                className="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded font-bold flex items-center gap-2"
+                className="bg-piraflix-gold hover:bg-piraflix-red hover:text-piraflix-accent px-6 py-2 rounded font-bold flex items-center gap-2 text-piraflix-black shadow transition"
                 onClick={() => setShowTrailer(true)}
               >
                 Ver tráiler
               </button>
             )}
             <button
-              className="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded font-bold flex items-center gap-2"
+              className="bg-piraflix-gray hover:bg-piraflix-gold hover:text-piraflix-black px-6 py-2 rounded font-bold flex items-center gap-2 text-piraflix-accent shadow transition"
               onClick={() => setShowCredits(true)}
             >
               Créditos
             </button>
             <button
-              className="bg-gray-700 hover:bg-gray-600 px-6 py-2 rounded font-bold"
+              className="bg-piraflix-gray hover:bg-piraflix-gold hover:text-piraflix-black px-6 py-2 rounded font-bold text-piraflix-accent shadow transition"
               onClick={() => navigate(-1)}
             >
               Volver
@@ -176,16 +176,16 @@ const Watch = () => {
           {/* Reparto */}
           {cast.length > 0 && (
             <div className="mb-4">
-              <h2 className="font-semibold mb-2">Reparto principal</h2>
+              <h2 className="font-semibold mb-2 text-piraflix-gold">Reparto principal</h2>
               <div className="flex flex-wrap gap-4">
                 {cast.map((actor) => (
                   <div key={actor.id} className="flex flex-col items-center w-20">
                     <img
                       src={actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/185x278?text=Sin+Foto'}
                       alt={actor.name}
-                      className="rounded-full w-16 h-16 object-cover mb-1 border border-gray-700"
+                      className="rounded-full w-16 h-16 object-cover mb-1 border border-piraflix-gold"
                     />
-                    <span className="text-xs text-center text-gray-300">{actor.name}</span>
+                    <span className="text-xs text-center text-piraflix-accent">{actor.name}</span>
                   </div>
                 ))}
               </div>
@@ -194,14 +194,14 @@ const Watch = () => {
           {/* Más fotos */}
           {details.images && details.images.backdrops && details.images.backdrops.length > 1 && (
             <div className="mb-4">
-              <h2 className="font-semibold mb-2">Más fotos</h2>
+              <h2 className="font-semibold mb-2 text-piraflix-gold">Más fotos</h2>
               <div className="flex gap-2 overflow-x-auto">
                 {details.images.backdrops.slice(1, 6).map((img: any, idx: number) => (
                   <img
                     key={idx}
                     src={`https://image.tmdb.org/t/p/w500${img.file_path}`}
                     alt="Backdrop extra"
-                    className="rounded w-40 h-24 object-cover"
+                    className="rounded w-40 h-24 object-cover border border-piraflix-gold"
                   />
                 ))}
               </div>
@@ -210,10 +210,10 @@ const Watch = () => {
           {/* Temporadas y episodios para series */}
           {type === 'tv' && seasons.length > 0 && (
             <div className="mb-8">
-              <h2 className="font-semibold mb-4 text-xl">Temporadas</h2>
+              <h2 className="font-semibold mb-4 text-xl text-piraflix-gold">Temporadas</h2>
               <div className="space-y-4">
                 {seasons.map((season: any) => (
-                  <div key={season.season_number} className="bg-gray-800 rounded-lg p-4">
+                  <div key={season.season_number} className="bg-piraflix-gray rounded-lg p-4">
                     <div className="flex items-center justify-between cursor-pointer" onClick={async () => {
                       setExpandedSeason(expandedSeason === season.season_number ? null : season.season_number);
                       if (!episodesBySeason[season.season_number]) await fetchEpisodes(season.season_number);
@@ -222,29 +222,29 @@ const Watch = () => {
                         <img
                           src={season.poster_path ? `https://image.tmdb.org/t/p/w185${season.poster_path}` : 'https://via.placeholder.com/185x278?text=Sin+Imagen'}
                           alt={season.name}
-                          className="w-16 h-24 rounded object-cover border border-gray-700"
+                          className="w-16 h-24 rounded object-cover border border-piraflix-gold"
                         />
                         <div>
-                          <h3 className="text-lg font-bold">{season.name}</h3>
-                          <p className="text-gray-400 text-sm">{season.air_date ? `Estreno: ${season.air_date}` : ''}</p>
-                          <p className="text-gray-300 text-sm">{season.episode_count} episodios</p>
+                          <h3 className="text-lg font-bold text-piraflix-gold">{season.name}</h3>
+                          <p className="text-piraflix-accent text-sm">{season.air_date ? `Estreno: ${season.air_date}` : ''}</p>
+                          <p className="text-piraflix-accent text-sm">{season.episode_count} episodios</p>
                         </div>
                       </div>
-                      <span className="text-gray-400 text-2xl">{expandedSeason === season.season_number ? '−' : '+'}</span>
+                      <span className="text-piraflix-gold text-2xl">{expandedSeason === season.season_number ? '−' : '+'}</span>
                     </div>
                     {expandedSeason === season.season_number && episodesBySeason[season.season_number] && (
                       <div className="mt-4 space-y-4">
                         {episodesBySeason[season.season_number].map((ep: any) => (
-                          <div key={ep.id} className="flex gap-4 bg-gray-900 rounded p-3">
+                          <div key={ep.id} className="flex gap-4 bg-piraflix-black rounded p-3">
                             <img
                               src={ep.still_path ? `https://image.tmdb.org/t/p/w300${ep.still_path}` : 'https://via.placeholder.com/300x169?text=Sin+Imagen'}
                               alt={ep.name}
-                              className="w-32 h-20 object-cover rounded"
+                              className="w-32 h-20 object-cover rounded border border-piraflix-gold"
                             />
                             <div>
-                              <h4 className="font-bold">{ep.episode_number}. {ep.name}</h4>
-                              <p className="text-gray-400 text-sm mb-1">{ep.air_date ? `Emitido: ${ep.air_date}` : ''}</p>
-                              <p className="text-gray-300 text-sm">{ep.overview || 'Sin sinopsis.'}</p>
+                              <h4 className="font-bold text-piraflix-gold">{ep.episode_number}. {ep.name}</h4>
+                              <p className="text-piraflix-accent text-sm mb-1">{ep.air_date ? `Emitido: ${ep.air_date}` : ''}</p>
+                              <p className="text-piraflix-accent text-sm">{ep.overview || 'Sin sinopsis.'}</p>
                             </div>
                           </div>
                         ))}
@@ -259,7 +259,7 @@ const Watch = () => {
       </div>
       {/* VideoPlayer modal */}
       {isPlaying && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-piraflix-black/90 flex items-center justify-center z-50">
           <VideoPlayer
             videoUrl={details.videoUrl || ''}
             title={details.title || details.name}
@@ -269,50 +269,46 @@ const Watch = () => {
       )}
       {/* Trailer modal */}
       {showTrailer && trailer && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
-          <div className="relative w-full max-w-2xl aspect-video">
+        <div className="fixed inset-0 bg-piraflix-black/90 flex items-center justify-center z-50">
+          <div className="relative w-full max-w-3xl aspect-video">
             <button
-              className="absolute top-2 right-2 bg-black/70 text-white rounded-full p-2 z-10 hover:bg-black"
+              className="absolute top-2 right-2 bg-piraflix-black/80 text-piraflix-accent rounded-full p-2 z-10 hover:bg-piraflix-gold hover:text-piraflix-black"
               onClick={() => setShowTrailer(false)}
             >
-              ✕
+              ×
             </button>
             <iframe
-              width="100%"
-              height="100%"
               src={trailer}
-              title="Tráiler"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              title="Trailer"
+              className="w-full h-full rounded-lg shadow-lg"
               allowFullScreen
-              className="rounded-lg w-full h-full"
-            ></iframe>
+            />
           </div>
         </div>
       )}
       {/* Créditos modal */}
       {showCredits && (
-        <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
-          <div className="relative w-full max-w-2xl bg-gray-900 rounded-lg p-6">
+        <div className="fixed inset-0 bg-piraflix-black/90 flex items-center justify-center z-50">
+          <div className="relative w-full max-w-2xl bg-piraflix-gray rounded-lg p-6">
             <button
-              className="absolute top-2 right-2 bg-black/70 text-white rounded-full p-2 z-10 hover:bg-black"
+              className="absolute top-2 right-2 bg-piraflix-black/70 text-piraflix-accent rounded-full p-2 z-10 hover:bg-piraflix-gold hover:text-piraflix-black"
               onClick={() => setShowCredits(false)}
             >
-              ✕
+              ×
             </button>
-            <h2 className="text-xl font-bold mb-4">Créditos</h2>
+            <h2 className="text-xl font-bold mb-4 text-piraflix-gold">Créditos</h2>
             {cast.length > 0 && (
               <div className="mb-4">
-                <h3 className="font-semibold mb-2">Reparto principal</h3>
+                <h3 className="font-semibold mb-2 text-piraflix-gold">Reparto principal</h3>
                 <div className="flex flex-wrap gap-4">
                   {cast.map((actor) => (
                     <div key={actor.id} className="flex flex-col items-center w-20">
                       <img
                         src={actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/185x278?text=Sin+Foto'}
                         alt={actor.name}
-                        className="rounded-full w-12 h-12 object-cover mb-1 border border-gray-700"
+                        className="rounded-full w-12 h-12 object-cover mb-1 border border-piraflix-gold"
                       />
-                      <span className="text-xs text-center text-gray-300">{actor.name}</span>
+                      <span className="text-xs text-center text-piraflix-accent">{actor.name}</span>
                     </div>
                   ))}
                 </div>
@@ -320,18 +316,18 @@ const Watch = () => {
             )}
             {details.credits && (
               <div className="mb-4">
-                <h3 className="font-semibold mb-2">Equipo técnico</h3>
+                <h3 className="font-semibold mb-2 text-piraflix-gold">Equipo técnico</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {details.credits.crew.filter((c: any) => ['Director', 'Screenplay', 'Writer', 'Producer'].includes(c.job)).map((crew: any, idx: number) => (
-                    <div key={idx} className="text-gray-300">
-                      <span className="font-bold">{crew.job}:</span> {crew.name}
+                    <div key={idx} className="text-piraflix-accent">
+                      <span className="font-bold text-piraflix-gold">{crew.job}:</span> {crew.name}
                     </div>
                   ))}
                 </div>
               </div>
             )}
             {!details.credits && (
-              <div className="text-gray-400">No hay información de créditos disponible.</div>
+              <div className="text-piraflix-gold">No hay información de créditos disponible.</div>
             )}
           </div>
         </div>
